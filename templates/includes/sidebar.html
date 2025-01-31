@@ -1,8 +1,12 @@
-<ul>
-  <li>
-    <a href = "{% url 'todo:tasks_list' %}">Home</a>
-  </li>
-  <li>
-    <a href = "{% url 'todo:tags_list' %}">Tasks</a>
-  </li>
-</ul>
+<table class="table table-bordered">
+  <tr>
+    <td>
+      <a href = "{% url 'todo:tasks_list' %}">Home</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href = "{% url 'todo:tags_list' %}">Tags</a>
+    </td>
+  </tr>
+</table>
