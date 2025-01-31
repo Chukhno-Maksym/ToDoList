@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>TODO list</h1>
-  <a href="{% url 'todo:task_form' %}">Create task</a>
+  <a href="{% url 'todo:task_form' %}" class="btn btn-primary">Create task</a>
   {% for task in tasks %}
     <ul>
       <li><strong>{{task.content}} </strong>{{ task.status }}</li>
@@ -17,12 +17,12 @@
       {% if task.is_done %}
         <form method="POST" action="{% url 'todo:task_undo' pk=task.pk %}">
           {% csrf_token %}
-          <button type="submit">Undo</button>
+          <button type="submit" class="btn btn-secondary">Undo</button>
         </form>
       {% else %}
         <form method="POST" action="{% url 'todo:task_complete' pk=task.pk %}">
           {% csrf_token %}
-          <button type="submit">Complete</button>
+          <button type="submit" class="btn btn-success">Complete</button>
         </form>
       {% endif %}
     </ul>
