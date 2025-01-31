@@ -1,7 +1,7 @@
+from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic, View
-
 from todo.forms import TaskForm, TagForm
 from todo.models import Task, Tag
 
@@ -14,7 +14,7 @@ class TaskListView(generic.ListView):
 
 class TaskCreateView(generic.CreateView):
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     success_url = reverse_lazy("todo:tasks_list")
 
 
@@ -23,6 +23,7 @@ class TaskUpdateView(generic.UpdateView):
     form_class = TaskForm
     success_url = reverse_lazy("todo:tasks_list")
 
+
 class TaskDeleteView(generic.DeleteView):
     model = Task
     success_url = reverse_lazy("todo:tasks_list")
@@ -30,7 +31,11 @@ class TaskDeleteView(generic.DeleteView):
 
 class TaskCompleteView(View):
     def post(self, request, pk):
-        task = Task.objects.get(pk=pk)
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            raise Http404("Task does not exist")
+
         task.is_done = True
         task.save()
         return redirect("todo:tasks_list")
@@ -38,7 +43,11 @@ class TaskCompleteView(View):
 
 class TaskUndoView(View):
     def post(self, request, pk):
-        task = Task.objects.get(pk=pk)
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            raise Http404("Task does not exist")
+
         task.is_done = False
         task.save()
         return redirect("todo:tasks_list")

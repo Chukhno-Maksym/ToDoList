@@ -9,8 +9,22 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-3">
       <div>
         <ul>
-          <li><strong>{{task.content}} </strong>{{ task.status }}</li>
-          <li>Created: {{task.created_at}} Deadline: {{ task.deadline }}</li>
+          <li>
+            <strong>
+              <span>{{ task.content }}</span>
+              <span class="status {% if task.is_done %}done{% else %}not-done{% endif %}">
+              {% if task.is_done %}
+                Done
+              {% else %}
+                Not done
+              {% endif %}
+              </span>
+            </strong>
+          </li>
+          <li>Created: {{task.created_at}}
+              {% if task.deadline %}
+                Deadline: {{ task.deadline }}
+              {% endif %}</li>
           <li>Tags:
             {% for tag in task.tags.all %}
               {{tag.name}}
