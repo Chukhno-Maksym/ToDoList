@@ -12,7 +12,7 @@ class TaskForm(forms.ModelForm):
     )
 
     tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
+        queryset=Tag.objects.prefetch_related("tags").all(),
         widget=forms.CheckboxSelectMultiple,
         required=False,
     )
