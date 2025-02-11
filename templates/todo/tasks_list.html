@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-3">
+    <h1>TODO list</h1>
+    <a href="{% url 'todo:task_form' %}" class="btn btn-primary">Create task</a>
+  </div>
+  {% for task in tasks %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-3">
+      <div>
+        <ul>
+          <li>
+            <strong>
+              <span>{{ task.content }}</span>
+              <span class="status {% if task.is_done %}done{% else %}not-done{% endif %}">
+              {% if task.is_done %}
+                Done
+              {% else %}
+                Not done
+              {% endif %}
+              </span>
+            </strong>
+          </li>
+          <li>Created: {{task.created_at}}
+              {% if task.deadline %}
+                Deadline: {{ task.deadline }}
+              {% endif %}</li>
+          <li>Tags:
+            {% for tag in task.tags.all %}
+              {{tag.name}}
+            {% endfor %}
+            <a href="{% url 'todo:task_update' pk=task.pk %}">Update</a>
+            <a href="{% url 'todo:task_delete' pk=task.pk %}">Delete</a>
+          </li>
+        </ul>
+      </div>
+        <div>
+          {% if task.is_done %}
+            <form method="POST" action="{% url 'todo:task_undo' pk=task.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary">Undo</button>
+            </form>
+          {% else %}
+            <form method="POST" action="{% url 'todo:task_complete' pk=task.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Complete</button>
+            </form>
+          {% endif %}
+        </div>
+    </div>
+    <hr>
+  {% endfor %}
+{% endblock %}
